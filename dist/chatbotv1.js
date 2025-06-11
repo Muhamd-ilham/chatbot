@@ -78,7 +78,7 @@ const bloggerGemini = (options) => {
         chatBox.scrollTop = chatBox.scrollHeight;
 
         try {
-            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${config.apiKey}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{text:userMessage}]}]})});
+            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-pro:generateContent?key=${config.apiKey}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{text:userMessage}]}]})});
             if (!response.ok) throw new Error('Gagal mendapatkan respons dari API.');
             const data = await response.json();
             const botMessage = data.candidates[0].content.parts[0].text;
