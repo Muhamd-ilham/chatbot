@@ -15,7 +15,7 @@ const bloggerGemini = (options) => {
 
 
     const defaultConfig = {
-        model: 'gemini-1.5-flash-latest',
+        model: 'gemini-1.5-pro-latest',
         userPhotoUrl: null,
         botPhotoUrl: null,
         initialBotMessage: "Halo! Ada yang bisa saya bantu hari ini?",
