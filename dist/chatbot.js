@@ -1,12 +1,9 @@
 /*
- * Blogger Gemini - El Creative
- * https://github.com/elhakimyasya/blogger-gemini
- *
- * Copyright (c) 2024 El Creative
- * Licensed under the MIT license.
+ * Chatbot by Ilhamz
+ * Copyright (c) 2025 Yoredaze
  */
 
-const bloggerGemini = (options) => {
+const chatBot = (options) => {
     const {
         elementContainer,
         config
@@ -23,7 +20,6 @@ const bloggerGemini = (options) => {
         return;
     }
 
-    // Buat elemen HTML untuk chatbot
     container.innerHTML = `
         <div class="gemini-chat-container">
             <div class="gemini-chat-box" id="gemini-chat-box">
@@ -53,9 +49,6 @@ const bloggerGemini = (options) => {
         chatBox.appendChild(messageElement);
         chatBox.scrollTop = chatBox.scrollHeight;
     };
-    
-    // Tambahkan pesan sambutan
-    addMessage("Halo! Ada yang bisa saya bantu?", 'bot');
 
     const handleUserInput = async () => {
         const userMessage = userInput.value.trim();
@@ -67,7 +60,7 @@ const bloggerGemini = (options) => {
         addMessage("<em>Sedang mengetik...</em>", 'bot-typing');
 
         try {
-            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${config.apiKey}`, {
+            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-latest:generateContent?key=${config.apiKey}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
