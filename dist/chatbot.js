@@ -81,7 +81,6 @@ const chatBot = (options) => {
             const data = await response.json();
             const botMessage = data.candidates[0].content.parts[0].text;
 
-            // Hapus pesan "Sedang mengetik..."
             const typingIndicator = chatBox.querySelector('.bot-typing-message');
             if (typingIndicator) {
                 chatBox.removeChild(typingIndicator);
