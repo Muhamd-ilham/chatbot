@@ -119,13 +119,12 @@ const bloggerGemini = (options) => {
         document.head.appendChild(style);
     };
 
-    // --- PEMBUATAN STRUKTUR HTML ---
     const createHTML = () => {
         container.innerHTML = `
             <div class="gemini-chat-container">
                 <div class="gemini-chat-header">
                     <h3>AI Chatbot</h3>
-                    ${finalConfig.enableHistory ? '<button id="gemini-clear-btn" title="Hapus Riwayat">Clear</button>' : ''}
+                    ${finalConfig.enableHistory ? '<button id="gemini-clear-btn" title="Hapus Riwayat">Bersihkan</button>' : ''}
                 </div>
                 <div class="gemini-chat-box" id="gemini-chat-box"></div>
                 <div class="gemini-input-area">
