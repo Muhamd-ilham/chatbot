@@ -1,7 +1,5 @@
-// --- KODE INTI BLOGGER GEMINI (VERSI PROFESIONAL) ---
-// Fitur: Riwayat Obrolan, Syntax Highlighting, dan Struktur yang Ditingkatkan
+
 const bloggerGemini = (options) => {
-    // --- DESTRUKTURISASI DAN VALIDASI AWAL ---
     const { elementContainer, config } = options;
 
     if (!config || !config.apiKey) {
@@ -15,14 +13,14 @@ const bloggerGemini = (options) => {
         return;
     }
 
-    // --- PENGATURAN DEFAULT DAN FINAL ---
+
     const defaultConfig = {
         model: 'gemini-1.5-flash-latest',
         userPhotoUrl: null,
         botPhotoUrl: null,
         initialBotMessage: "Halo! Ada yang bisa saya bantu hari ini?",
-        enableHistory: true, // AKTIFKAN/NONAKTIFKAN RIWAYAT
-        historyKey: `geminiChatHistory_${elementContainer}`, // Kunci unik untuk localStorage
+        enableHistory: true,
+        historyKey: `geminiChatHistory_${elementContainer}`,
         syntaxHighlighting: {
             enable: true,
             theme: 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css' // Tema bisa diganti
@@ -48,7 +46,7 @@ const bloggerGemini = (options) => {
             const savedHistory = localStorage.getItem(finalConfig.historyKey);
             if (savedHistory) {
                 chatHistory = JSON.parse(savedHistory);
-                chatHistory.forEach(item => addMessage(item.message, item.sender, item.type, false)); // Jangan simpan ulang saat memuat
+                chatHistory.forEach(item => addMessage(item.message, item.sender, item.type, false));
             }
         } catch (e) {
             console.error('Gagal memuat riwayat obrolan:', e);
@@ -59,35 +57,25 @@ const bloggerGemini = (options) => {
     const clearHistory = () => {
         chatHistory = [];
         localStorage.removeItem(finalConfig.historyKey);
-        chatBox.innerHTML = ''; // Hapus dari UI
-        addMessage(finalConfig.initialBotMessage, 'bot'); // Tambahkan pesan awal kembali
+        chatBox.innerHTML = ''; 
+        addMessage(finalConfig.initialBotMessage, 'bot'); 
     };
 
-
-    // --- PEMUATAN DEPENDENSI (HIGHLIGHT.JS) ---
     const loadDependencies = () => {
         if (!finalConfig.syntaxHighlighting.enable || window.hljs) return;
 
-        // Muat CSS untuk tema
         const link = document.createElement('link');
         link.rel = 'stylesheet';
         link.href = finalConfig.syntaxHighlighting.theme;
         document.head.appendChild(link);
 
-        // Muat JS library
         const script = document.createElement('script');
         script.src = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js';
         script.onload = () => {
-            // Muat bahasa tambahan jika perlu (opsional)
-            // const langScript = document.createElement('script');
-            // langScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js';
-            // document.head.appendChild(langScript);
         };
         document.head.appendChild(script);
     };
 
-
-    // --- INJEKSI CSS UTAMA ---
     const injectCSS = () => {
         const style = document.createElement('style');
         style.textContent = `
@@ -136,7 +124,7 @@ const bloggerGemini = (options) => {
         container.innerHTML = `
             <div class="gemini-chat-container">
                 <div class="gemini-chat-header">
-                    <h3>AI Assistant</h3>
+                    <h3>AI Chatbot</h3>
                     ${finalConfig.enableHistory ? '<button id="gemini-clear-btn" title="Hapus Riwayat">Clear</button>' : ''}
                 </div>
                 <div class="gemini-chat-box" id="gemini-chat-box"></div>
@@ -152,7 +140,6 @@ const bloggerGemini = (options) => {
         `;
     };
 
-    // --- REFERENSI ELEMEN DOM ---
     let chatBox, userInput, sendBtn, clearBtn;
     const assignDOMElements = () => {
         chatBox = document.getElementById('gemini-chat-box');
@@ -163,9 +150,6 @@ const bloggerGemini = (options) => {
         }
     };
 
-    // --- FUNGSI UTAMA ---
-    
-    // Fungsi untuk sanitasi HTML pada blok kode
     const escapeHtml = (unsafe) => {
         return unsafe
              .replace(/&/g, "&amp;")
@@ -177,14 +161,13 @@ const bloggerGemini = (options) => {
 
     const formatMessage = (message) => {
         let formatted = message;
-        // Tangani blok kode terlebih dahulu
+
         formatted = formatted.replace(/```(\w*)\n([\s\S]*?)```/g, (match, lang, code) => {
             const language = lang || 'plaintext';
             const escapedCode = escapeHtml(code.trim());
             return `<pre><code class="language-${language}">${escapedCode}</code></pre>`;
         });
 
-        // Format sisa teks (bold, italic) dan ganti baris baru
         formatted = formatted
             .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
             .replace(/\*(.*?)\*/g, '<em>$1</em>')
@@ -210,7 +193,6 @@ const bloggerGemini = (options) => {
         
         messageContainer.appendChild(messageElement);
 
-        // Tambahkan foto profil jika ada
         const photoUrl = sender === 'user' ? finalConfig.userPhotoUrl : finalConfig.botPhotoUrl;
         if (photoUrl) {
             const avatarElement = document.createElement('img');
@@ -223,7 +205,6 @@ const bloggerGemini = (options) => {
         wrapper.appendChild(messageContainer);
         chatBox.appendChild(wrapper);
 
-        // Terapkan syntax highlighting jika ada blok kode
         if (finalConfig.syntaxHighlighting.enable && window.hljs) {
             wrapper.querySelectorAll('pre code').forEach((block) => {
                 hljs.highlightElement(block);
@@ -232,7 +213,6 @@ const bloggerGemini = (options) => {
         
         chatBox.scrollTop = chatBox.scrollHeight;
 
-        // Simpan ke riwayat jika diperlukan
         if (save && finalConfig.enableHistory) {
             chatHistory.push({ sender, message, type });
             saveHistory();
@@ -289,7 +269,6 @@ const bloggerGemini = (options) => {
         }
     };
 
-    // --- EVENT LISTENERS ---
     const bindEvents = () => {
         sendBtn.addEventListener('click', handleUserInput);
         userInput.addEventListener('keypress', (e) => {
@@ -303,7 +282,6 @@ const bloggerGemini = (options) => {
         }
     };
 
-    // --- INISIALISASI ---
     const init = () => {
         loadDependencies();
         injectCSS();
@@ -312,12 +290,11 @@ const bloggerGemini = (options) => {
         bindEvents();
         
         loadHistory();
-        // Jika tidak ada riwayat, tampilkan pesan awal
+
         if (chatHistory.length === 0 && finalConfig.initialBotMessage) {
             addMessage(finalConfig.initialBotMessage, 'bot');
         }
     };
 
-    // Jalankan inisialisasi
     init();
 };
